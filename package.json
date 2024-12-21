@@ -8,7 +8,11 @@
     "packages/*"
   ],
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build:frontend": "npm run build --prefix src/frontend",
+    "start:frontend": "npm run start --prefix src/frontend",
+    "build:backend": "npm run build --prefix src/backend",
+    "build:all": "npm run build:frontend && npm run build:backend"
   },
   "repository": {
     "type": "git",
