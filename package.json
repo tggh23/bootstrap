@@ -1,0 +1,23 @@
+{
+  "name": "bootstrap",
+  "version": "1.0.0",
+  "description": "Bootstrap networks of programatic agents",
+  "main": "index.js",
+  "workspaces": [
+    "src/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tggh23/bootstrap.git"
+  },
+  "author": "Troy Gayman",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tggh23/bootstrap/issues"
+  },
+  "homepage": "https://github.com/tggh23/bootstrap#readme"
+}
