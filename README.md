@@ -186,3 +186,12 @@ For cross-cutting concerns (e.g., logging, caching, authentication), introduce m
 When I mention "layers," I’m referring to cross-cutting concerns or functionalities that are used across multiple parts of your application, but don’t necessarily belong to a specific service or controller. These are typically implemented as single-purpose utilities, middleware, or modules, and they’re often reusable throughout your application.
 
 For example, logging, caching, and authentication don’t fit neatly into the service/controller model because they’re more like application-wide infrastructure. Let’s break it down.
+
+
+TODO
+
+1. Backend gptController gptService
+2. Backend deploy resources, db, ?
+3. Frontend portal deployment,
+4.
+5.
