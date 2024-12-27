@@ -1,67 +1,3 @@
-
-
-### **Differences Between AWS SDK and CloudFormation**
-
-#### **1. Procedural vs Declarative**
-- **CloudFormation**:
-  - **Declarative**: You define the desired state of your infrastructure as a template, and AWS handles the provisioning.
-  - Example:
-    ```yaml
-    Resources:
-      MyBucket:
-        Type: AWS::S3::Bucket
-        Properties:
-          BucketName: my-app-bucket
-    ```
-  - AWS ensures resources match the template (e.g., updates, rollbacks).
-
-- **AWS SDK**:
-  - **Procedural**: You write code to create, update, or delete resources programmatically.
-  - Example:
-    ```typescript
-    import { S3Client, CreateBucketCommand } from "@aws-sdk/client-s3";
-
-    const client = new S3Client({ region: "us-east-1" });
-    const command = new CreateBucketCommand({ Bucket: "my-app-bucket" });
-    await client.send(command);
-    ```
-  - You manage the logic to ensure resources are created, updated, or deleted correctly.
-
----
-
-#### **2. State Management**
-- **CloudFormation**:
-  - Automatically tracks the state of your resources in a stack.
-  - Manages updates, rollbacks, and dependencies.
-
-- **AWS SDK**:
-  - You are responsible for tracking resource state and dependencies.
-  - For example, if creating an S3 bucket depends on a VPC existing, you must write code to check for the VPC’s existence first.
-
----
-
-#### **3. Automation and Flexibility**
-- **CloudFormation**:
-  - Works well for infrastructure as code but can be less flexible for conditional logic, looping, or dynamic configurations.
-  - Limited by template size and YAML/JSON syntax.
-
-- **AWS SDK**:
-  - Offers full flexibility of a programming language.
-  - Great for dynamic infrastructure, custom logic, and integrating with third-party APIs or systems.
-
----
-
-#### **4. Deployment Workflow**
-- **CloudFormation**:
-  - Deployed via AWS Console, CLI (`aws cloudformation deploy`), or CI/CD pipelines.
-  - AWS manages the deployment lifecycle.
-
-- **AWS SDK**:
-  - Deployed via custom scripts or tools, typically integrated into CI/CD pipelines.
-  - Requires custom code for deployment lifecycle (e.g., error handling, retries).
-
----
-
 ### **Best Practices for Using the AWS SDK for Deployment**
 
 #### **1. Use Modular Scripts**
@@ -142,10 +78,8 @@
     node deploy.ts --env prod
     ```
 
-#### **8. Use Infrastructure-as-Code Where Practical**
-- For static or large-scale infrastructure, consider combining the AWS SDK with CloudFormation or AWS CDK for hybrid deployment.
-
----
+------------------------------------------------------------------------------
+------------------------------------------------------------------------------
 
 ### **Patterns for Using the AWS SDK**
 
@@ -223,62 +157,8 @@ export const config = {
 };
 ```
 
----
-
-### **When to Use AWS SDK Over CloudFormation**
-
-#### **Use AWS SDK If**:
-- You need dynamic infrastructure that changes based on runtime conditions.
-- Your deployment involves complex logic or external systems.
-- You’re automating infrastructure as part of a larger application flow.
-
-#### **Use CloudFormation If**:
-- Your infrastructure is mostly static and doesn’t require runtime decisions.
-- You want AWS to handle state management, rollbacks, and dependencies.
-- You prefer declarative over procedural approaches.
-
----
-
-### **Summary**
-
-The AWS SDK offers flexibility and control for deploying resources programmatically, but it comes with added responsibilities, such as managing state and dependencies. To use the SDK effectively:
-
-1. **Adopt modular, reusable scripts** for resource operations.
-2. **Implement idempotency and error handling** to avoid duplicate or failed deployments.
-3. **Leverage a configuration-driven approach** for environment-specific parameters.
-4. **Integrate deployment into CI/CD pipelines** for automation.
-
-Using the AWS SDK is powerful for dynamic and custom deployments but can also complement CloudFormation or AWS CDK for hybrid workflows. Let me know if you'd like help with a specific deployment scenario!
-
-
-
-
-
-
-Yes, when using the **AWS SDK**, the deployment of resources often feels more like creating **disparate resources** and connecting them programmatically. This contrasts with **CloudFormation**, where resources are declared in a single, coherent "stack," and AWS automatically handles dependencies and resource orchestration.
-
-However, with the right patterns and best practices, you can achieve a level of cohesion in SDK-based deployments similar to CloudFormation stacks.
-
----
-
-### **Key Differences in Approach**
-
-#### **1. CloudFormation: A Coherent Stack**
-- Resources are treated as a **logical unit** within a stack.
-- AWS automatically manages:
-  - Resource dependencies.
-  - Updates and rollbacks.
-  - Consistency between resources.
-- Example: 
-  - Declaring an S3 bucket, Lambda function, and IAM role in a single YAML/JSON template ensures they are linked and deployed together.
-
-#### **2. AWS SDK: Disparate Resources**
-- Resources are created programmatically and may feel more **disconnected** unless you explicitly manage their relationships.
-- You must:
-  - Handle dependencies yourself (e.g., ensure an IAM role exists before assigning it to a Lambda function).
-  - Keep track of deployed resources and their relationships.
-
----
+------------------------------------------------------------------------------
+------------------------------------------------------------------------------
 
 ### **How to Make SDK Deployments More Cohesive**
 
@@ -433,53 +313,19 @@ const cleanup = async () => {
 cleanup().catch((err) => console.error('Cleanup failed:', err));
 ```
 
----
 
-#### **7. Embrace Idempotency**
-Make your scripts idempotent to ensure safe re-runs without duplicating resources or causing conflicts.
-
-**How to Ensure Idempotency**:
-- Check for resource existence before creating it.
-- Example:
-  ```typescript
-  const bucketExists = async (bucketName: string): Promise<boolean> => {
-    try {
-      await s3Client.send(new HeadBucketCommand({ Bucket: bucketName }));
-      return true;
-    } catch {
-      return false;
-    }
-  };
-
-  if (!(await bucketExists('myapp-dev-bucket'))) {
-    await createBucket('myapp-dev-bucket');
-  }
-  ```
-
----
-
-### **When to Use SDK Over CloudFormation**
-
-#### **Use AWS SDK If**:
-- You need **dynamic resource creation** based on runtime data or logic (e.g., creating resources for different clients on demand).
-- Your application interacts with **third-party APIs** or systems outside of AWS.
-- You prefer the flexibility of programming languages over declarative templates.
-
-#### **Use CloudFormation If**:
-- Your infrastructure is relatively static and can be described declaratively.
-- You need **state management**, rollbacks, and dependency tracking out of the box.
-- You want to leverage AWS-native CI/CD tools like **CodePipeline**.
-
----
-
-### **Summary**
-Using the AWS SDK for deployments involves creating individual resources programmatically and connecting them as needed. While it lacks the built-in cohesion of a CloudFormation stack, you can achieve similar coherence by:
-
-1. Treating resources as logical groups with consistent naming.
-2. Centralizing resource tracking and configurations.
-3. Using a deployment orchestrator to manage dependencies and workflows.
-4. Writing modular and idempotent scripts for reusability.
-
-The AWS SDK offers flexibility and is great for dynamic or highly customized deployments. However, for static and state-managed infrastructure, CloudFormation or AWS CDK might be more appropriate.
-
-Let me know if you'd like help with specific examples or scenarios!
+---------------------
+//check on cdk
+sdk
+    modular deployment scripts divided by resource type
+    use aws client utilities
+    should be idempot, check for existing resources
+    handle dependencies between resources, eg iam role needed for lambda.
+    error handling
+    cicd deployment
+    use utils/wrappers for common functions like createBucket(name), bucketExists(name) etc.
+    Have a single orchestration script that can be called locally or via the cicd workflow
+    Have a multi environment config file, json/yaml
+    centralize resource tracking, names/arns/etc, in a file or db table.
+    dependency injection?
+    environment agnostic/ all through parameters
