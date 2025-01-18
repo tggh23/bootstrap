@@ -3,8 +3,10 @@
   "compilerOptions": {
     "outDir": "dist",
     "rootDir": "app",
-    "moduleResolution": "node",
+    "moduleResolution": "NodeNext",
+    "module": "NodeNext",
     "baseUrl": ".",
+    "composite": true,
     "paths": {
       "common/*": ["../../packages/common/src/*"]
     },

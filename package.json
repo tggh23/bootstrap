@@ -3,12 +3,14 @@
   "version": "1.0.0",
   "description": "Bootstrap networks of programatic agents",
   "main": "index.js",
+  "type": "module",
   "workspaces": [
     "src/*",
     "packages/*",
     "cdk/*"
   ],
   "scripts": {
+    "install-common": "npm install --workspace=packages/common",
     "test": "echo \"Error: no test specified\" && exit 1",
     "build:frontend": "npm run build --prefix src/frontend",
     "start:frontend": "npm run start --prefix src/frontend",
@@ -28,6 +30,12 @@
   },
   "homepage": "https://github.com/tggh23/bootstrap#readme",
   "dependencies": {
-    "dotenv": "^16.4.7"
+    "dotenv": "^16.4.7",
+    "tsconfig-paths": "^4.2.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.7",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.3"
   }
 }

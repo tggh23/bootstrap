@@ -5,16 +5,17 @@
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
     "scripts": {
-      "build": "tsc -b",
-      "clean": "rimraf dist",
-      "test": "jest"
+        "build": "tsc -b",
+        "clean": "rimraf dist",
+        "test": "jest"
     },
     "dependencies": {
-
+        "axios": "^1.7.9",
+        "dotenv": "^16.4.7",
+        "openai": "^4.79.1"
     },
     "devDependencies": {
-      "typescript": "^5.3.0",
-      "rimraf": "^5.0.0"
+        "rimraf": "^5.0.0",
+        "typescript": "^5.3.0"
     }
-  }
-  
+}
