@@ -4,12 +4,17 @@
     "type": "module",
     "private": true,
     "scripts": {
-      "build": "build",
-      "dev": "dev",
-      "start": "start"
-    },
+        "dev": "tsx -r dotenv/config app/app.ts",
+        "build": "tsc -p tsconfig.json",
+        "start": "node dist/app.js"
+      },
     "dependencies": {
       "common": "*"
+    },
+    "devDependencies": {
+      "typescript": "^5.0.0",
+      "ts-node": "^10.9.1",
+      "@types/node": "^18.0.0"
     },
     "engines": {
       "node": ">=18"

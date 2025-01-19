@@ -1,12 +1,13 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
+    "module": "NodeNext",
+    "moduleResolution": "nodeNext",
     "outDir": "dist",
     "rootDir": "app",
-    "moduleResolution": "NodeNext",
-    "module": "NodeNext",
     "baseUrl": ".",
     "composite": true,
+
     "paths": {
       "common/*": ["../../packages/common/src/*"]
     },
@@ -15,6 +16,9 @@
     "sourceMap": true,
     "skipLibCheck": true,
     "strict": true
+  },
+  "ts-node": {
+    "esm": true,
   },
   "include": ["app/**/*"],
   "exclude": ["node_modules", "dist"]
