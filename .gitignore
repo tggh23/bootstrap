@@ -14,6 +14,7 @@ pids
 *.seed
 *.pid.lock
 
+dist/
 
 # node-waf configuration
 .lock-wscript
