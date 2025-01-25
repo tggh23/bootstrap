@@ -17,17 +17,14 @@ export default class GPTService {
     });
   }
 
-  async sendPrompt(prompt: string): Promise<OpenAI.Chat.ChatCompletion> {
+  async sendPrompt(messages: any[]): Promise<OpenAI.Chat.ChatCompletion> {
     try {
       const completion = await this.openai.chat.completions.create({
         model: "gpt-4o-mini",
-        messages: [
-            { role: "system", content: prompt },
-
-        ],
+        messages: messages
     });
 
-      console.log(completion.choices[0].message);
+      // console.log(completion.choices[0].message);
       return completion;
     } catch (error: any) {
       console.error('GPT API Error:', error.response?.data || error.message);

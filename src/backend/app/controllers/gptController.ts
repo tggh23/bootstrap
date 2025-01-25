@@ -8,9 +8,9 @@ export default class GPTController {
     this.gptService = new GPTService();
   }
 
-  async generateResponse(userMessage: string): Promise<OpenAI.Chat.ChatCompletionMessage> {
+  async generateResponse(messages: any[]): Promise<OpenAI.Chat.ChatCompletionMessage> {
     try {
-      const completion = await this.gptService.sendPrompt(userMessage);
+      const completion = await this.gptService.sendPrompt(messages);
 
       return completion.choices[0].message;
     } catch (error: any) {
