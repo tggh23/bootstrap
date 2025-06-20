@@ -20,6 +20,15 @@ App generator
 
 Agent definition
 
+
+Projects
+    swarm game 
+    motion api
+    meta instrument
+    marketing pipeline
+    investment docs analysis
+
+
 Platform can host multiple projects
     projects have a definition template or directory.
     platform hosts editing portal
@@ -195,3 +204,58 @@ TODO
 3. Frontend portal deployment,
 4.
 5.
+
+System design 
+    This is a tool used to design multiple projects. It outputs code repositories
+        The infrastructure is at least mostly hosted on aws.
+        It has a front end portal
+        It has a backend that will need a database
+        It contains ai actors that can execute code and git commits
+        Ai actors can commmunicate with each other. 
+        The tool keeps track of projects that it has output.
+        It builds apps
+        It can maintain apps.
+        Some actors create other actors
+
+
+    Test, write a tic tac toe app with aws infrastructure.
+
+
+    Boot strap is its own event loop.
+        Does the bootstrap loop maintain apps, or does it build the apps to be self maintaining.
+        The apps will need much more infrastructure to be self maintaining but it might be simpler
+
+Next steps
+    1. actor class 
+    Properties:
+
+    id: Unique identifier for the actor.
+    role: The specific role or type of work this actor performs (e.g., "frontend developer", "CICD integrator").
+    state: Current state of the actor (e.g., idle, working, blocked, waiting for feedback).
+    inputQueue: Tasks or instructions this actor is waiting to process.
+    outputQueue: Tasks or data this actor has produced for others.
+    dependencies: References to other actors or resources needed for execution.
+    capabilities: A list of functions or actions this actor can perform (e.g., "write code", "run CLI commands").
+    logs: History of actions or changes performed.
+    priority: Priority level for task execution.
+    feedbackRequired: Flag indicating whether manual input is needed to proceed.
+
+Methods:
+    processTask(task): Executes the task based on the actor's capabilities.
+    communicateWith(actor, message): Sends a message or data to another actor.
+    logAction(action): Logs the performed action for traceability.
+    checkForBlockers(): Determines if the actor needs feedback or is waiting for dependencies.
+
+
+    //Next step,
+
+        Infrastructure utilities.
+            Write output to a file,
+            Commits/PRs
+            
+
+        Have one agent generate TS code, have another generate code to execute it
+        One agent create other agents to completely complete the tasks
+
+        Have a controller actor trigger another actor to get a result. Have the controller agent write the messages. Return the result
+        Agent Tree Json file.
