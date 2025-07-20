@@ -16,7 +16,8 @@
     "sourceMap": true,
     "skipLibCheck": true,
     "strict": true,
-    "noEmit": true                           // 👈 prevent tsc from emitting — esbuild will handle bundling
+    "outDir": "dist",
+    "composite": true
   },
   "ts-node": {
     "esm": true

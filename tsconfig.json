@@ -1,8 +1,8 @@
 {
     "compilerOptions": {
       "target": "ES2022",
-      "module": "esnext",
-      "moduleResolution": "node",
+      "module": "NodeNext",
+      "moduleResolution": "NodeNext",
       "strict": true,
       "esModuleInterop": true,
       "allowSyntheticDefaultImports": true,
@@ -10,7 +10,8 @@
       "paths": {
         "common/*": ["packages/common/src/*"]
       },
-      "skipLibCheck": true
+      "skipLibCheck": true,
+      "composite": true
     },
     "include": ["src/**/*", "packages/**/*"],
     "exclude": ["node_modules", "dist"],
