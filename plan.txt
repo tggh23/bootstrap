@@ -1,0 +1,200 @@
+# Project Architecture Plan for Dynamic Task-Oriented Agent System
+
+## Overview
+This project aims to create a dynamic, task-oriented agent system capable of planning, executing, and verifying tasks and subtasks. The system will dynamically create a network of agents to complete complex tasks, with features for logging, manual approvals, and robust error handling.
+
+---
+
+## Core Components
+
+### 1. **Agent System**
+- **Parent Agent**: Responsible for breaking down top-level tasks into subtasks and delegating them to child agents.
+- **Child Agents**: Handle specific subtasks and report back to the parent agent.
+- **Planner Module**: Generates a task execution plan, including dependencies and order of execution.
+- **Checker Module**: Verifies the correctness of completed tasks and subtasks.
+
+### 2. **Task Management**
+- **Task Data Structure**:
+  - **Fields**:
+    - `taskId`: Unique identifier for the task.
+    - `description`: Description of the task.
+    - `status`: Enum (`Pending`, `In Progress`, `Completed`, `Failed`).
+    - `dependencies`: List of task IDs that must be completed first.
+    - `assignedAgent`: Reference to the agent handling the task.
+    - `result`: Output or result of the task.
+  - **Storage**: Use a NoSQL database like MongoDB for flexibility and scalability.
+
+### 3. **Logging System**
+- **Purpose**: Track all actions, errors, and decisions made by agents.
+- **Implementation**:
+  - Use a logging library like `winston` for Node.js.
+  - Log levels: `info`, `warn`, `error`, `debug`.
+  - Store logs in a centralized location (e.g., Elasticsearch for querying and analysis).
+
+### 4. **Manual Approval System**
+- **Purpose**: Allow human intervention at critical points.
+- **Implementation**:
+  - Define checkpoints in the task plan where manual approval is required.
+  - Use a web interface or CLI for approvals.
+  - Store approval states in the database.
+
+### 5. **Error Handling and Recovery**
+- **Error Types**:
+  - Task execution errors.
+  - Dependency resolution errors.
+- **Recovery Mechanisms**:
+  - Retry failed tasks a configurable number of times.
+  - Escalate errors to parent agents or manual intervention.
+
+---
+
+## Technical Details
+
+### 1. **Programming Language**
+- Use TypeScript for type safety and modern JavaScript features.
+
+### 2. **Frameworks and Libraries**
+- **Backend**: Node.js with Express.js for APIs.
+- **Database**: MongoDB for task storage.
+- **Logging**: `winston` for logging.
+- **Task Queue**: `bull` or `agenda` for managing task execution.
+
+### 3. **Data Flow**
+1. Parent agent receives a top-level task.
+2. Planner module generates a task plan.
+3. Tasks are stored in the database.
+4. Child agents execute tasks and update their status in the database.
+5. Checker module verifies task results.
+6. Logs are generated at each step.
+7. Manual approvals are requested at checkpoints.
+
+### 4. **Storage**
+- **Task Data**: MongoDB.
+- **Logs**: Elasticsearch.
+- **Configuration**: JSON or YAML files for system settings.
+
+### 5. **APIs**
+- **Endpoints**:
+  - `POST /tasks`: Create a new task.
+  - `GET /tasks/:id`: Retrieve task details.
+  - `PUT /tasks/:id`: Update task status.
+  - `POST /approvals`: Submit manual approval.
+
+---
+
+## Future Enhancements
+- **AI Integration**: Use GPT models for task planning and verification.
+- **Distributed Execution**: Deploy agents across multiple servers for scalability.
+- **Visualization**: Add a dashboard for monitoring task progress and logs.
+
+---
+
+## CDK Infrastructure and Deployment Plan
+
+### Initial Steps
+1. **Set Up CDK Project**:
+   - Ensure the CDK project is initialized (already present in `cdk/` folder).
+   - Verify `cdk.json` and `package.json` are correctly configured.
+
+2. **Define Infrastructure**:
+   - Start with basic infrastructure components:
+     - **S3 Bucket**: For storing application artifacts or logs.
+     - **DynamoDB Table**: For storing task and agent data.
+     - **Lambda Functions**: For executing agent logic.
+     - **API Gateway**: To expose APIs for manual approvals and task management.
+
+3. **Write CDK Stacks**:
+   - Create separate stacks for backend and frontend resources:
+     - `BackendStack`: Define Lambda, DynamoDB, and API Gateway.
+     - `FrontendStack`: Define S3 bucket for hosting static frontend assets.
+
+4. **Test Deployment**:
+   - Use `npx cdk synth` to generate CloudFormation templates.
+   - Deploy using `npx cdk deploy` and verify resources are created.
+
+### Testing Plan
+1. **Unit Tests**:
+   - Write Jest tests for CDK constructs (e.g., check if S3 bucket is created).
+
+2. **Integration Tests**:
+   - Deploy to a test environment and verify end-to-end functionality.
+
+3. **Logging and Monitoring**:
+   - Ensure CloudWatch is set up for Lambda logs.
+   - Add alarms for critical metrics (e.g., Lambda errors).
+
+### Next Steps
+- Integrate the deployed infrastructure with the backend application.
+- Add CI/CD pipelines for automated deployment.
+- Expand infrastructure as needed (e.g., add RDS for relational data).
+
+-------------------------------------
+task orchestration notes
+
+1. Top level 
+  Planner agent takes in prompt, app notes file(s) with details on desired functionality and features. 
+    Including business logic(menus, user sessions etc.), ux/visual description, deployment infrastructure, technical decisions and best practices to follow(jest unit tests, github actions, clean code etc. )
+
+2. Sequencing level
+  Takes high level breakdown and notes as input and returns 
+  Execution order, Dependency graph, Grouping of parallelizable tasks, Integration planning steps
+  data structure and storage? 
+
+
+🔁 This pattern mirrors how real-world engineering teams operate:
+
+    Architects (Planner)
+    Project Managers / Leads (Sequencer)
+    Devs (Executor Agents)
+    Integrators / QA (optional but valuable)
+
+
+Top level
+  The planner agent takes a prompt and app notes files with context. 
+  Notes can describe business logic, visuals, deployment setup, and technical standards. 
+  It returns a high-level task breakdown with fields like id, title, description, and dependencies. 
+  Each task may reference the notes file it came from.
+
+Sequencing level
+  The sequencer agent takes the high-level tasks and determines execution order. 
+  It returns a dependency graph, parallel groupings, and integration steps. 
+  These guide how and when each task should run. 
+  Integration tasks can be marked for special handling.
+
+Data structure and storage
+  Tasks are stored as a tree of node objects to support recursion and nested subtasks.
+  Each node includes basic metadata like id, description, status, and links to parent and child tasks. 
+  Dependencies and results are tracked on each node. The format should be easy to save and update as JSON.
+
+Recursive execution
+  Executor agents decide if a task is simple enough to run or needs further breakdown. 
+  If complex, they spawn a planner agent scoped to that task. This builds deeper task trees dynamically. 
+  Recursion continues until a task can be executed directly.
+
+Small iteration principle
+  All planning, coding, and testing should happen in small, verifiable steps. 
+  Each change should be tested before proceeding. This helps isolate problems and ensures quality. 
+  Agents can be reminded to follow this rule in the context.
+
+
+
+-------------------------------------
+
+Next steps 
+
+//Base node of the agent tree: Lambda function that has instructions, context, writes output either to file or an object.
+
+1. Deploy lambda function that runs as base agent with instructions, context, and writes output to an s3 bucket. 
+2. run base agent lambda locally and on cloud.
+3. Write orchestrator lambda that calls a base agent locally and on cloud. 
+4. Have orchestrator/planner create division of labor. 
+5. Outline data structures and process for agent tree creation and task execution.
+
+
+
+//Temporal task management
+//Ability to create self maintaining repos
+//iterative testing with agents, gui based testing, human interaction/flags for blockers
+
+
+

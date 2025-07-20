@@ -1,25 +1,26 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
+    "target": "ES2022",
     "module": "NodeNext",
-    "moduleResolution": "nodeNext",
-    "outDir": "dist",
-    "rootDir": "app",
+    "moduleResolution": "NodeNext",
+    "lib": ["ES2022", "DOM"],
     "baseUrl": ".",
-    "composite": true,
-
     "paths": {
-      "common/*": ["../../packages/common/src/*"]
+      "common/*": ["../../packages/common/src/*"],
+      "@services/*": ["app/services/*"]
     },
-    "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
     "sourceMap": true,
     "skipLibCheck": true,
-    "strict": true
+    "strict": true,
+    "noEmit": true                           // 👈 prevent tsc from emitting — esbuild will handle bundling
   },
   "ts-node": {
-    "esm": true,
+    "esm": true
   },
-  "include": ["app/**/*"],
+  "include": ["app/**/*", "functions/**/*"],
   "exclude": ["node_modules", "dist"]
 }

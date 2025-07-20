@@ -10,13 +10,3 @@ const writeToFile = async (content: string, relativePath: string): Promise<void>
 };
 
 export default writeToFile;
-
-
-
-
-
-
-
-
-
-
